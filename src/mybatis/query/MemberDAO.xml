@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.member.dao.MemberMapper">
+		<resultMap type="com.spring.member.vo.MemberVO" id="memberVO">
+				<result property="kmem" column="KMEM" />
+				<result property="kkname" column="KKNAME" />
+				<result property="kename" column="KENAME" />
+				<result property="kid" column="KID" />
+				<result property="kpw" column="KPW" />
+				<result property="kgender" column="KGENDER" />
+				<result property="khp" column="KHP" />
+				<result property="kbirth" column="KBIRTH" />
+				<result property="kemail" column="KEMAIL" />
+				<result property="kpostno" column="KPOSTNO" />
+				<result property="kaddr" column="KADDR" />
+				<result property="kdeleteyn" column="KDELETEYN" />
+				<result property="kinsertdate" column="KINSERTDATE" />
+				<result property="kupdatedate" column="KUPDATEDATE" />
+				<result property="kimg" column="KIMG" />
+		</resultMap>
+		
+	<select id="listMember" resultMap="memberVO">
+		SELECT
+			 	A.KMEM KMEM
+			   ,A.KIMG KIMG
+			   ,A.KKNAME KKNAME
+			   ,A.KENAME KENAME
+			   ,A.KID KID
+			   <!-- ,A.KPW KPW -->
+			   ,A.KGENDER KGENDER
+			   ,A.KHP KHP
+			   ,A.KBIRTH KBIRTH
+			   ,A.KEMAIL KEMAIL
+			   ,A.KPOSTNO KPOSTNO
+			   ,A.KADDR KADDR
+			   ,A.KDELETEYN KDELETEYN
+			   ,A.KINSERTDATE KINSERTDATE
+			   ,A.KUPDATEDATE KUPDATEDATE
+			   FROM KBW_MEMBER A
+			   WHERE KDELETEYN = 'Y'
+	</select>
+	
+	<select id="selectMember" parameterType="java.lang.String" resultMap="memberVO">
+			SELECT
+			 		A.KMEM KMEM
+				   ,A.KIMG KIMG
+				   ,A.KKNAME KKNAME
+				   ,A.KENAME KENAME
+				   ,A.KID KID
+				  <!-- ,A.KPW KPW --> 
+				   ,A.KGENDER KGENDER
+				   ,A.KHP KHP
+				   ,A.KBIRTH KBIRTH
+				   ,A.KEMAIL KEMAIL
+				   ,A.KPOSTNO KPOSTNO
+				   ,A.KADDR KADDR
+				   ,A.KDELETEYN KDELETEYN
+				    ,A.KINSERTDATE KINSERTDATE
+			   		,A.KUPDATEDATE KUPDATEDATE
+				   FROM KBW_MEMBER A
+				   WHERE KMEM = #{kmem}
+	</select>
+	
+	<insert id="insertMember" parameterType="com.spring.member.vo.MemberVO">
+			INSERT INTO KBW_MEMBER
+				(KMEM, KIMG, KKNAME, KENAME, KID, KPW, KGENDER, KHP, KBIRTH, KEMAIL, KPOSTNO, KADDR, KDELETEYN, KINSERTDATE, KUPDATEDATE)
+			VALUES
+				(#{kmem},#{kimg},#{kkname},#{kename},#{kid},#{kpw},#{kgender},#{khp},#{kbirth},#{kemail},#{kpostno},#{kaddr}, 'Y', SYSDATE, SYSDATE)
+	</insert>
+	
+	<update id="updateMember" parameterType="com.spring.member.vo.MemberVO">
+			UPDATE KBW_MEMBER
+			SET 
+				KMEM = #{kmem}
+			   ,KIMG = #{kimg}
+			   ,KKNAME = #{kkname}
+			   ,KENAME = #{kename}
+			   ,KID = #{kid}
+			   ,KPW = #{kpw}
+			   ,KGENDER = #{kgender}
+			   ,KHP = #{khp}
+			   ,KBIRTH = #{kbirth}
+			   ,KEMAIL = #{kemail}
+			   ,KPOSTNO = #{kpostno}
+			   ,KADDR = #{kaddr} 
+			   ,KUPDATEDATE = SYSDATE
+	    	WHERE KMEM = #{kmem}
+	</update>
+	
+	<update id="deleteMember" parameterType="com.spring.member.vo.MemberVO">
+			UPDATE KBW_MEMBER
+			SET 
+				KDELETEYN = 'N'	
+			WHERE KMEM = #{kmem}
+			AND KDELETEYN = 'Y'
+	</update>
+	
+	<select id="chaebunMember" resultMap ="memberVO" >
+		SELECT NVL(MAX(SUBSTR(KMEM, 2)),0)+1 AS kmem FROM KBW_MEMBER		
+	</select>
+	
+	<select id="loginMember" parameterType="java.lang.String" resultMap="memberVO">
+			SELECT
+			 		A.KMEM KMEM
+				   ,A.KIMG KIMG
+				   ,A.KKNAME KKNAME
+				   ,A.KENAME KENAME
+				   ,A.KID KID
+				   ,A.KPW KPW
+				   ,A.KGENDER KGENDER
+				   ,A.KHP KHP
+				   ,A.KBIRTH KBIRTH
+				   ,A.KEMAIL KEMAIL
+				   ,A.KPOSTNO KPOSTNO
+				   ,A.KADDR KADDR
+				   ,A.KDELETEYN KDELETEYN
+				    ,A.KINSERTDATE KINSERTDATE
+			   		,A.KUPDATEDATE KUPDATEDATE
+				   FROM KBW_MEMBER A
+				   WHERE A.KID = #{kid}
+				   AND A.KPW = #{kpw}
+				   AND A.KDELETEYN = 'Y'
+	</select>
+	
+	<select id="idCheckMember" parameterType="com.spring.member.vo.MemberVO" resultMap="memberVO">
+			SELECT
+			 		A.KID KID
+				   FROM KBW_MEMBER A
+				   WHERE A.KID = #{kid}
+				   AND A.KDELETEYN = 'Y'
+	</select>
+	
+</mapper>

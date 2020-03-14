@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd 
+	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+   	  
+   	  <!-- DB Connection -->
+	  <context:property-placeholder location="/WEB-INF/jdbc.properties" /> 
+   	  
+   	  <bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="driverClassName" value="${jdbc.driverClass}"></property>
+			<property name="url" value="${jdbc.url}"></property>
+			<property name="username" value="${jdbc.username}"></property>
+			<property name="password" value="${jdbc.password}"></property>
+		</bean>
+		
+   	  <!-- DataSource 디비연결정보 찾아온다 데이터 소스 id >> ref로 연결됨, 방법은 여러가지 -->
+   	<!--   <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+   	  		<property name="jndiName" value="java:comp/env/jdbc/Oracle11g" />
+   	  </bean> -->
+   	  
+   	  <!-- Mybatis Setting 스프링3.0에는 Ibatis가 내장되어있음 알아서 찾아감  -->
+   	  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+   	  			<property name="dataSource" ref="dataSource"/>
+   	  			<property name="mapperLocations" value="classpath:mybatis/query/*.xml"/>
+   	  </bean>
+	
+	  <!-- a PlatformTransactionManager is still required ref로 연결된 dataSource -->
+	  <bean id="transactionManager"
+	    	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	    	<property name="dataSource" ref="dataSource"/>
+	  </bean>
+	  
+	  <!-- mapper 찾아오기 20줄 .xml에서 연결되어 쿼리를 연결시켜줌 >> com.spring.**.dao -->
+	  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	  		<property name="basePackage"><value>com.spring.**.dao</value></property>
+	  </bean>
+
+</beans>

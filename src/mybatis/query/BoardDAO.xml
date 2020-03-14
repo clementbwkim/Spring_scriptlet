@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.board.dao.BoardMapper">
+		<resultMap type="com.spring.board.vo.BoardVO" id="boardVO">
+				<result property="kno" column="KNO" />
+				<result property="ksubject" column="KSUBJECT" />
+				<result property="kname" column="KNAME" />
+				<result property="kpw" column="KPW" />
+				<result property="kmemo" column="KMEMO" />
+				<result property="kdeleteyn" column="KDELETEYN" />
+				<result property="kinsertdate" column="KINSERTDATE" />
+				<result property="kupdatedate" column="KUPDATEDATE" />
+				<result property="kimg" column="KIMG" />
+		</resultMap>
+		
+	<select id="listBoard" resultMap="boardVO">
+		SELECT
+			 	A.KNO KNO
+			   ,A.KSUBJECT KSUBJECT
+			   ,A.KNAME KNAME
+			   ,A.KIMG KIMG
+			   ,A.KPW KPW
+			   ,A.KMEMO KMEMO
+			   ,A.KDELETEYN KDELETEYN
+			   ,A.KINSERTDATE KINSERTDATE
+			   ,A.KUPDATEDATE KUPDATEDATE
+			   FROM KBW_HELLOBOARD A
+			   WHERE KDELETEYN = 'Y'
+	</select>
+	
+	<select id="selectBoard" parameterType="java.lang.String" resultMap="boardVO">
+			SELECT
+			 		A.KNO KNO
+				   ,A.KSUBJECT KSUBJECT
+				   ,A.KNAME KNAME
+				   ,A.KIMG KIMG
+				   ,A.KPW KPW
+				   ,A.KMEMO KMEMO
+				   ,A.KDELETEYN KDELETEYN
+				   ,A.KINSERTDATE KINSERTDATE
+				   ,A.KUPDATEDATE KUPDATEDATE
+				   FROM KBW_HELLOBOARD A
+				   WHERE KNO = #{kno}
+	</select>
+	
+	<insert id="insertBoard" parameterType="com.spring.board.vo.BoardVO">
+			INSERT INTO KBW_HELLOBOARD
+				(KNO, KSUBJECT, KNAME, KIMG, KPW, KMEMO, KDELETEYN, KINSERTDATE, KUPDATEDATE)
+			VALUES
+				(#{kno},#{ksubject},#{kname},#{kimg},#{kpw},#{kmemo},'Y', SYSDATE, SYSDATE)
+	</insert>
+	
+	<update id="updateBoard" parameterType="com.spring.board.vo.BoardVO">
+			UPDATE KBW_HELLOBOARD
+			SET 
+				KNO = #{kno}
+			   ,KSUBJECT = #{ksubject}
+			   ,KNAME = #{kname}
+			   ,KIMG = #{kimg}
+			   ,KPW = #{kpw}
+			   ,KMEMO = #{kmemo}
+			   ,KUPDATEDATE = SYSDATE
+	    	WHERE KNO = #{kno}
+	</update>
+	
+	<update id="deleteBoard" parameterType="com.spring.board.vo.BoardVO">
+			UPDATE KBW_HELLOBOARD
+			SET 
+				KDELETEYN = 'N'	
+			WHERE KNO = #{kno}
+			AND KDELETEYN = 'Y'
+	</update>
+	
+	<select id="chaebunBoard" resultMap ="boardVO" >
+		SELECT NVL(MAX(SUBSTR(KNO, 2)),0)+1 AS kno FROM KBW_HELLOBOARD		
+	</select>
+	
+</mapper>

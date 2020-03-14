@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	   					   
+	  <!-- 어노테이션 설정 -->
+	  <context:annotation-config />
+	  
+	  <!-- Controller -->
+	  <context:component-scan base-package="com.spring.**" />
+	  
+	  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="viewResolver">
+	  	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+	  	<property name="prefix" value="/WEB-INF/jsp/"></property>
+	  	<property name="suffix" value=".jsp"></property>
+	  </bean>
+	  
+	  <!-- Mybatis 환경설정 파일를 부른다  -->
+	  	<import resource="servlet-context.xml"/>
+</beans>
